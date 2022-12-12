@@ -39,6 +39,18 @@ class PostRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllForIndex(int $limit = null): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->orderBy('p.created', 'DESC');
+
+        if ($limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Post[] Returns an array of Post objects
 //     */

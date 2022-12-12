@@ -2,7 +2,7 @@
 
 {% block title %}{{ post.title }}{% endblock %}
 
-{% block body %}
+{% block content %}
     <article class="blog">
         <header>
             <div class="date"><time datetime="{{ post.created|date('c') }}">{{ post.created|date('l, F j, Y') }}</time></div>
@@ -13,4 +13,21 @@
             <p>{{ post.blog }}</p>
         </div>
     </article>
+    <section class="comments" id="comments">
+        <section>
+            <h3>Добавить комментарий</h3>
+            {% for flashMessage in app.session.flashbag.get('blogger-send-comment') %}
+                <div class="blogger-notice">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+            {{ form_start(form, { 'action': path('blog_create_comment' , { 'blog_id' : post.id }), 'method': 'POST', 'attr': {'class': 'blogger'} }) }}
+            {{ form_widget(form) }}
+            {{ form_rest(form) }}
+        </section>
+        <section class="previous-comments">
+            <h3>Комментарии</h3>
+            {% include 'blog/comments.html.twig' with { 'comments': comments } %}
+        </section>
+    </section>
 {% endblock %}

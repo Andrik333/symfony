@@ -1,5 +1,26 @@
 {% extends 'blog.html.twig' %}
 
 {% block content %}
-    {{controller_name}}
+    {% for post in posts %}
+        <article class="blog">
+            <div class="date"><time datetime="{{ post.created|date('c') }}">{{ post.created|date('l, F j, Y') }}</time></div>
+            <header>
+                <h2><a href="{{ path('blog_show', { 'id': post.id }) }}">{{ post.title }}</a></h2>
+            </header>
+
+            <img src="{{ asset(['assets/blog/image/', post.image]|join) }}" />
+            <div class="snippet">
+                <p>{{ post.blog(100) }}</p>
+                <p class="continue"><a href="{{ path('blog_show', { 'id': post.id }) }}">Читать...</a></p>
+            </div>
+
+            <footer class="meta">
+                <p>Комментариев: {{post.comments()|length}}</p>
+                <p>Автор <span class="highlight">{{post.autor}}</span> от {{ post.created|date('h:m') }}</p>
+                <p>Теги: <span class="highlight">{{ post.tags }}</span></p>
+            </footer>
+        </article>
+    {% else %}
+        <p>Статьи отсутствуют</p>
+    {% endfor %}
 {% endblock %}

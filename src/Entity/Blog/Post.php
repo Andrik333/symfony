@@ -3,6 +3,8 @@
 namespace App\Entity\Blog;
 
 use App\Repository\Blog\PostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,8 +44,6 @@ class Post
      */
     private $tags;
 
-    private $comments;
-
     /**
      * @ORM\Column(type="datetime")
      */
@@ -54,10 +54,16 @@ class Post
      */
     private $updated;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="blog", cascade={"persist"})
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->setCreated(new \DateTime());
         $this->setUpdated(new \DateTime());
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -97,9 +103,17 @@ class Post
         return $this;
     }
 
-    public function getBlog(): ?string
+    public function getBlog(int $length = null): ?string
     {
-        return $this->blog;
+        if (!is_null($length)) {
+            if (mb_strlen($this->blog) > $length) {
+                return substr($this->blog, 0, $length) . '...';
+            } else {
+                return $this->blog;
+            }
+        } else {
+            return $this->blog;
+        } 
     }
 
     public function setBlog(string $blog): self
@@ -133,18 +147,6 @@ class Post
         return $this;
     }
 
-    public function getComments(): ?string
-    {
-        return $this->comments;
-    }
-
-    public function setComments(?string $comments): self
-    {
-        $this->comments = $comments;
-
-        return $this;
-    }
-
     public function getCreated(): ?\DateTimeInterface
     {
         return $this->created;
@@ -165,6 +167,36 @@ class Post
     public function setUpdated(\DateTimeInterface $updated): self
     {
         $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $comment->setBlog($this);
+            $this->comments[] = $comment;
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getBlog() === $this) {
+                $comment->setBlog(null);
+            }
+        }
 
         return $this;
     }
