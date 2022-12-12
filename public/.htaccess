@@ -1,5 +1,5 @@
 RewriteEngine On
 RewriteBase /
 
-RewriteCond %{REQUEST_URI} !^/var/
+RewriteCond %{REQUEST_URI} !^/assets/
 RewriteRule .+ index.php

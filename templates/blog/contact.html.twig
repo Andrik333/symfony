@@ -1,0 +1,27 @@
+{% extends 'blog.html.twig' %}
+
+
+{% block title %}Контакты{% endblock %}
+
+{% block content %}
+    <header>
+        <h1>Контакты</h1>
+    </header>
+
+    {% for flashMessage in app.session.flashbag.get('blogger-notice') %}
+        <div class="blogger-notice">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(form, { 'action': path('blog_contact'), 'method': 'POST', 'attr': {'class': 'blogger'} }) }}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.subject) }}
+    {{ form_row(form.body) }}
+    {{ form_row(form.save) }}
+
+    {{ form_rest(form) }}
+{% endblock %}
