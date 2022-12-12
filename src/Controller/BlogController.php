@@ -4,14 +4,17 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Email;
 use App\Entity\Blog\Contact;
+use App\Entity\Blog\Post;
 use App\Form\Blog\ContactFormType;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\Blog\PostRepository;
 
 class BlogController extends AbstractController
 {
@@ -24,6 +27,35 @@ class BlogController extends AbstractController
             'controller_name' => 'BlogController',
         ]);
     }
+
+    /**
+     * @Route("/blog/show/{id}", name="blog_show", methods={"GET"}, requirements={"id"="\d+"})
+     */
+    public function show(PostRepository $postRepository, int $id): Response
+    {
+        $post = $postRepository->find($id);
+        
+        if (!$post) {
+            throw $this->createNotFoundException('Статья отсутствует.');
+        }
+
+        return $this->render('blog/show.html.twig', [
+            'post' => $post
+        ]);
+    }
+    // create post
+    // public function createPost(ManagerRegistry $doctrine): void
+    // {
+    //     $entityManager = $doctrine->getManager();
+    //     $post = new Post;
+    //     $post->setTitle('A day with Symfony2');
+    //     $post->setBlog('Lorem ipsum dolor sit d us imperdiet justo scelerisque. Nulla consectetur...');
+    //     $post->setImage('beach.png');
+    //     $post->setAutor('autor');
+    //     $post->setTags('paradise, symblog');
+    //     $entityManager->persist($post);
+    //     $entityManager->flush();
+    // }
 
     /**
      * @Route("/blog/about", name="blog_about")
