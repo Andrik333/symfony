@@ -1,0 +1,33 @@
+<section class="section">
+    <header>
+        <h3>Облако тегов</h3>
+    </header>
+    <p class="tags">
+        {% for tag, weight in tags %}
+            <span class="weight-{{ weight }}">{{ tag }}</span>
+        {% else %}
+            <p>Теги отсутствуют</p>
+        {% endfor %}
+    </p>
+</section>
+<section class="section">
+    <header>
+        <h3>Последние комментарии</h3>
+    </header>
+    {% for comment in comments %}
+        <article class="comment">
+            <header>
+                <p class="small"><span class="highlight">{{ comment.user }}</span> в
+                    <a href="{{ path('blog_show', { 'id': comment.blog.id, 'slug': comment.blog.slug }) }}#comment-{{ comment.id }}">
+                        {{ comment.blog.title }}
+                    </a>
+                    [<em><time datetime="{{ comment.created|created_ago }}">{{ comment.created|created_ago }}</time></em>]
+                </p>
+            </header>
+            <p>{{ comment.comment }}</p>
+            </p>
+        </article>
+    {% else %}
+        <p>Комментарии отсутствуют</p>
+    {% endfor %}
+</section>

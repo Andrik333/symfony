@@ -36,7 +36,7 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/blog/show/{id}", name="blog_show", methods={"GET"}, requirements={"id"="\d+"})
+     * @Route("/blog/show/{id}/{slug}", name="blog_show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(CommentRepository $commentRepository, PostRepository $postRepository, int $id): Response
     {
@@ -56,6 +56,20 @@ class BlogController extends AbstractController
             'comments' => $comments,
             'form' => $form->createView()
         ]);
+    }
+
+    public function sidebar(PostRepository $postRepository, CommentRepository $commentRepository): Response
+    {
+        $tags = $postRepository->getTags();
+        $tagWeights = $postRepository->getTagWeights($tags);
+
+        $comments = $commentRepository->getLatestComments();
+
+        return $this->render('blog/sidebar.html.twig', [
+            'tags' => $tagWeights,
+            'comments' => $comments
+        ]);
+
     }
 
     /**
@@ -80,7 +94,7 @@ class BlogController extends AbstractController
             }
         }
 
-        return $this->redirect($this->generateUrl('blog_show', ['id' => $blog_id]));
+        return $this->redirect($this->generateUrl('blog_show', ['id' => $post->getId(), 'slug' => $post->getSlug()]));
     }
     
     // create post

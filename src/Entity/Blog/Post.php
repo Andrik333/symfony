@@ -35,6 +35,11 @@ class Post
     private $blog;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    protected $slug;
+
+    /**
      * @ORM\Column(type="string", length=40)
      */
     private $image;
@@ -87,6 +92,7 @@ class Post
     public function setTitle(string $title): self
     {
         $this->title = $title;
+        $this->setSlug($this->title);
 
         return $this;
     }
@@ -199,5 +205,40 @@ class Post
         }
 
         return $this;
+    }
+
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    public function setSlug($slug)
+    {
+        $this->slug = $this->slugify($slug);
+
+        return $this;
+    }
+
+    public function slugify($text)
+    {
+        $text = preg_replace('#[^\\pL\d]+#u', '-', $text);
+
+        $text = trim($text, '-');
+
+        if (function_exists('iconv'))
+        {
+            $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        }
+
+        $text = strtolower($text);
+
+        $text = preg_replace('#[^-\w]+#', '', $text);
+
+        if (empty($text))
+        {
+            return 'n-a';
+        }
+
+        return $text;
     }
 }

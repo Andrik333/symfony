@@ -34,7 +34,9 @@
             {% block content %}{% endblock %}
         </section>
         <aside class="sidebar">
-            {% block sidebar %}Sidebar контент{% endblock %}
+            {% block sidebar %}
+                {{ render(controller('App\\Controller\\BlogController:sidebar')) }}
+            {% endblock %}
         </aside>
 
         <div id="footer">

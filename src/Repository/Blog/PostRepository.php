@@ -42,6 +42,8 @@ class PostRepository extends ServiceEntityRepository
     public function findAllForIndex(int $limit = null): array
     {
         $qb = $this->createQueryBuilder('p')
+            ->select('p, c')
+            ->leftJoin('p.comments', 'c')
             ->orderBy('p.created', 'DESC');
 
         if ($limit) {
@@ -49,6 +51,51 @@ class PostRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function getTags()
+    {
+        $blogTags = $this->createQueryBuilder('b')
+                        ->select('b.tags')
+                        ->getQuery()
+                        ->getResult();
+
+        $tags = [];
+        foreach ($blogTags as $blogTag)
+        {
+            $tags = array_merge(explode(",", $blogTag['tags']), $tags);
+        }
+
+        $tags = array_map('trim', $tags);
+
+        return $tags;
+    }
+
+    public function getTagWeights($tags)
+    {
+        $tagWeights = [];
+
+        if (empty($tags)) {
+            return $tagWeights;
+        }
+
+        foreach ($tags as $tag) {
+            $tagWeights[$tag] = (isset($tagWeights[$tag])) ? $tagWeights[$tag] + 1 : 1;
+        }
+
+        uksort($tagWeights, function() {
+            return rand() > rand();
+        });
+
+        $max = max($tagWeights);
+
+        $multiplier = ($max > 5) ? 5 / $max : 1;
+
+        foreach ($tagWeights as &$tag) {
+            $tag = ceil($tag * $multiplier);
+        }
+
+        return $tagWeights;
     }
 
 //    /**
