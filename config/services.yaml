@@ -22,7 +22,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Extensions\Twig\TwigFiltersExtension:
+    App\Extensions\Twig\ExtensoinTwig:
         tags: ['twig.extension']
 
     # add more service definitions when explicit configuration is needed

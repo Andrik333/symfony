@@ -5,16 +5,16 @@ namespace App\Extensions\Twig;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class TwigFiltersExtension extends AbstractExtension 
+class ExtensoinTwig extends AbstractExtension 
 {
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('created_ago', [$this, 'createdAgo']),        
         ];
     }
     
-    public function createdAgo(\DateTime $dateTime)
+    public function createdAgo(\DateTime $dateTime): string
     {
 
         $delta = \time() - $dateTime->getTimestamp();
@@ -28,12 +28,12 @@ class TwigFiltersExtension extends AbstractExtension
             $time = $delta;
             $duration = $time . " секунд" . $this->getPrefix($time, 's') . " назад";
         }
-        else if ($delta <= 3600)
+        else if ($delta < 3600)
         {
             $time = floor($delta / 60);
             $duration = $time . " минут" . $this->getPrefix($time, 'm') . " назад";
         }
-        else if ($delta <= 86400)
+        else if ($delta < 86400)
         {
             $time = floor($delta / 3600);
             $duration = $time . " час" . $this->getPrefix($time, 'h') . " назад";
@@ -46,7 +46,7 @@ class TwigFiltersExtension extends AbstractExtension
         return $duration;
     }
 
-    public function getPrefix($time, $type)
+    public function getPrefix($time, $type): string
     {
         switch ($type) {
             case 's':
@@ -70,6 +70,8 @@ class TwigFiltersExtension extends AbstractExtension
                 if ($time > 5) return 'дней';
                 break;
         }
+
+        return '';
     }
 
     public function getName()
