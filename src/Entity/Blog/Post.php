@@ -61,7 +61,7 @@ class Post
     private $updated;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="blog", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="blog", cascade={"persist"}, orphanRemoval=true)
      */
     private $comments;
 
