@@ -27,3 +27,13 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    admin.post:
+        class: App\Admin\PostAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Blog\Post, group: 'Блог', manager_type: orm, label: Посты }
+            
+    admin.comment:
+        class: App\Admin\CommentAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Blog\Comment, group: 'Блог', manager_type: orm, label: Комментарии }
