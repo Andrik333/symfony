@@ -18,9 +18,14 @@ body {
 #file_form,
 .wrapper-table,
 .notice,
-.wrapper-pages {
+.pagination {
     display: flex;
     justify-content: center;
+}
+
+.top {
+    display: flex;
+    justify-content: space-around;
 }
 
 table {
@@ -61,25 +66,28 @@ tbody tr:last-child td {
     background-color: #f55;
 }
 
-.wrapper-pages {
+.pagination {
     padding: 10px;
 }
 
-.wrapper-pages > * {
+.pagination > * {
     margin: 0 5px;
     padding: 10px;
     border-radius: 7px;
 }
 
-.pages-item.accessible {
+.pagination > *:not(.current) {
     background: #efefef;
     border: 1px solid #cfcfcf;
-    cursor: pointer;
-    text-decoration: none;
-    color: #3933ff;
 }
 
-.pages-item.current {
+.pagination > .current {
     background: #e8e8e8;
     box-shadow: 0px 0px 6px 2px #999999;
+    cursor: no-drop;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #3933ff;
 }

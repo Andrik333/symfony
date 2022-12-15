@@ -5,6 +5,9 @@ namespace App\Repository\Moex;
 use App\Entity\Moex\FullOrder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 
 /**
  * @extends ServiceEntityRepository<FullOrder>
@@ -16,8 +19,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FullOrderRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $paginator;
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
+        $this->paginator = $paginator;
         parent::__construct($registry, FullOrder::class);
     }
 
@@ -67,25 +72,17 @@ class FullOrderRepository extends ServiceEntityRepository
         $em->clear();
     }
 
-    public function getFullOrderPage(int $limit, int $page = 1): array
+    public function getFullOrderPage(int $limit, int $currentPage, Request $request): SlidingPagination
     {
-        return $this->createQueryBuilder('fo')
+        $query = $this->createQueryBuilder('fo')
            ->orderBy('fo.id', 'ASC')
-           ->setMaxResults($limit)
-           ->setFirstResult($limit * ($page - 1))
-           ->getQuery()
-           ->getResult()
-       ;
-    }
+           ->getQuery();
 
-    public function getCountPage(int $limit): int
-    {
-        $count = $this->createQueryBuilder('fo')
-            ->select('count(fo.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        return ceil($count/$limit);
+        return $pagination = $this->paginator->paginate(
+            $query,
+            $request->query->getInt('page', $currentPage),
+            $limit
+        );
     }
 
 //    /**

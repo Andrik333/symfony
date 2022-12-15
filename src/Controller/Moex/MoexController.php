@@ -23,37 +23,11 @@ class MoexController extends AbstractController
     {
         $form = $this->createForm(FileFormType::class);
         $limit = $this->getParameter('moex')['limit-in-page'];
-        $pages = $forep->getCountPage($limit);
-        $arrayPages = [];
-        if ($pages > 1) {
-            $arrayPages[] = 1;
-            if (($page - 4) > 1) {
-                $arrayPages[] = '...';
-                $min = $page - 4;
-            } else {
-                $min = $arrayPages[0] + 1;
-            }
-            if (($page + 4) < $pages) {
-                $max = $page + 4;
-                $perEnd = '...';
-            } else {
-                $max = $pages;
-            }
-            for ($min; $min < $max; $min++) { 
-                $arrayPages[] = $min;
-            }
-            if (isset($perEnd)) {
-                $arrayPages[] = $perEnd;
-            }
-            $arrayPages[] = $pages;
-        }
-        $data = $forep->getFullOrderPage($limit, $page);
+        $data = $forep->getFullOrderPage($limit, $page, $request);
 
         return $this->render('moex/index.html.twig', [
             'form' => $form->createView(),
-            'data' => $data,
-            'pages' => $arrayPages,
-            'currentPage' => $page
+            'pagination' => $data
         ]);
     }
 

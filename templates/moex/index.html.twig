@@ -6,6 +6,10 @@
     {{ form_start(form, { 'action': path('moex_load_data'), 'method': 'POST', 'attr': {'class': 'moex-load-file'} }) }}
     {{ form_widget(form) }}
     {{ form_rest(form) }}
+    {{ form_end(form) }}
+    <div class="count">
+        Всего записей: {{ pagination.getTotalItemCount|number_format(0, '.', ' ') }}
+    </div>
 {% endblock %}
 
 {% block content %}
@@ -36,7 +40,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in data %}
+            {% for row in pagination %}
                 <tr>
                     <td>{{ row.no|number_format(0, '.', ' ') }}</td>
                     <td>{{ row.secCode }}</td>
@@ -57,17 +61,7 @@
         </tbody>
     </table>
 </div>
-{% if pages|length > 0 %}
-    <div class="wrapper-pages">
-        {% for page in pages %}
-            {% if page == '...' %}
-                <span class="pages-item infinity">{{ page }}</span>
-            {% elseif page == currentPage %}
-                <span class="pages-item current">{{ page }}</span>
-            {% else %}
-                <a href="{{ path('moex_index', { 'page': page }) }}" class="pages-item accessible">{{ page }}</a>
-            {% endif %}
-        {% endfor %}
-    </div>
-{% endif %}
+<div class="navigation">
+    {{ knp_pagination_render(pagination) }}
+</div>
 {% endblock %}
