@@ -80,7 +80,7 @@ class FullOrderRepository extends ServiceEntityRepository
 
         return $pagination = $this->paginator->paginate(
             $query,
-            $request->query->getInt('page', $currentPage),
+            $currentPage,
             $limit
         );
     }
