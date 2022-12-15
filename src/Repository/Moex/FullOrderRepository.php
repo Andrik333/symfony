@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @extends ServiceEntityRepository<FullOrder>
@@ -72,11 +73,13 @@ class FullOrderRepository extends ServiceEntityRepository
         $em->clear();
     }
 
-    public function getFullOrderPage(int $limit, int $currentPage): SlidingPagination
+    public function getFullOrderPage(int $limit, Request $request): SlidingPagination
     {
         $query = $this->createQueryBuilder('fo')
            ->orderBy('fo.id', 'ASC')
            ->getQuery();
+        
+        $currentPage = $request->query->getInt('page', 1);
 
         return $this->paginator->paginate($query, $currentPage, $limit);
     }

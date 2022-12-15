@@ -17,13 +17,13 @@ use App\Extensions\Moex\UploadFile;
 class MoexController extends AbstractController
 {
     /**
-     * @Route("/moex/{page<\d+>?1}", name="moex_index", methods={"GET"})
+     * @Route("/moex/", name="moex_index", methods={"GET"})
      */
-    public function index(Request $request, FullOrderRepository $forep, int $page): Response
+    public function index(Request $request, FullOrderRepository $forep): Response
     {
         $form = $this->createForm(FileFormType::class);
         $limit = $this->getParameter('moex')['limit-in-page'];
-        $data = $forep->getFullOrderPage($limit, $page);
+        $data = $forep->getFullOrderPage($limit, $request);
 
         return $this->render('moex/index.html.twig', [
             'form' => $form->createView(),
