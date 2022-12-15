@@ -23,7 +23,7 @@ class MoexController extends AbstractController
     {
         $form = $this->createForm(FileFormType::class);
         $limit = $this->getParameter('moex')['limit-in-page'];
-        $data = $forep->getFullOrderPage($limit, $page, $request);
+        $data = $forep->getFullOrderPage($limit, $page);
 
         return $this->render('moex/index.html.twig', [
             'form' => $form->createView(),

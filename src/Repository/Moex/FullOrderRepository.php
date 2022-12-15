@@ -6,7 +6,6 @@ use App\Entity\Moex\FullOrder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 
 /**
@@ -20,6 +19,7 @@ use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 class FullOrderRepository extends ServiceEntityRepository
 {
     private $paginator;
+
     public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         $this->paginator = $paginator;
@@ -72,17 +72,13 @@ class FullOrderRepository extends ServiceEntityRepository
         $em->clear();
     }
 
-    public function getFullOrderPage(int $limit, int $currentPage, Request $request): SlidingPagination
+    public function getFullOrderPage(int $limit, int $currentPage): SlidingPagination
     {
         $query = $this->createQueryBuilder('fo')
            ->orderBy('fo.id', 'ASC')
            ->getQuery();
 
-        return $pagination = $this->paginator->paginate(
-            $query,
-            $currentPage,
-            $limit
-        );
+        return $this->paginator->paginate($query, $currentPage, $limit);
     }
 
 //    /**
