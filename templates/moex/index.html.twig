@@ -1,0 +1,73 @@
+{% extends 'moex.html.twig' %}
+
+{% block title %}Moex - Главная{% endblock %}
+
+{% block header %}
+    {{ form_start(form, { 'action': path('moex_load_data'), 'method': 'POST', 'attr': {'class': 'moex-load-file'} }) }}
+    {{ form_widget(form) }}
+    {{ form_rest(form) }}
+{% endblock %}
+
+{% block content %}
+{% for flashMessage in app.session.flashbag.get('moex-complite') %}
+    <div class="notice complite">
+        <span>{{ flashMessage }}</span>
+    </div>
+{% endfor %}
+{% for flashMessage in app.session.flashbag.get('moex-error') %}
+    <div class="notice error">
+        <span>{{ flashMessage }}</span>
+    </div>
+{% endfor %}
+<div class="wrapper-table">
+    <table>
+        <thead>
+            <tr>
+                <th>NO</th>
+                <th>SECCODE</th>
+                <th>BUYSELL</th>
+                <th>TIME</th>
+                <th>ORDERNO</th>
+                <th>ACTION</th>
+                <th>PRICE</th>
+                <th>VOLUME</th>
+                <th>TRADENO</th>
+                <th>TRADEPRICE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+                <tr>
+                    <td>{{ row.no|number_format(0, '.', ' ') }}</td>
+                    <td>{{ row.secCode }}</td>
+                    <td>{{ row.buysell }}</td>
+                    <td>{{ row.time|date('H:m:s.u') }}</td>
+                    <td>{{ row.orderNo|number_format(0, '.', '') }}</td>
+                    <td>{{ row.action }}</td>
+                    <td>{{ row.price|number_format(2, '.', ' ') }}</td>
+                    <td>{{ row.volume|number_format(0, '.', ' ') }}</td>
+                    <td>{{ row.tradeNo|number_format(0, '.', '') }}</td>
+                    <td>{{ row.tradePrice|number_format(2, '.', ' ')  }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10" style="text-align:center">Нет данных</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% if pages|length > 0 %}
+    <div class="wrapper-pages">
+        {% for page in pages %}
+            {% if page == '...' %}
+                <span class="pages-item infinity">{{ page }}</span>
+            {% elseif page == currentPage %}
+                <span class="pages-item current">{{ page }}</span>
+            {% else %}
+                <a href="{{ path('moex_index', { 'page': page }) }}" class="pages-item accessible">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

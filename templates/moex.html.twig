@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Moex{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/moex/css/style.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+    <section id="wrapper">
+        <header id="header">
+            <div class="top">
+            {% block header %}{% endblock %}
+            </div>
+        </header>
+
+        <section class="main-col">
+            {% block content %}{% endblock %}
+        </section>
+
+        <div id="footer">
+            {% block footer %}
+                
+            {% endblock %}
+        </div>
+    </section>
+{% endblock %}

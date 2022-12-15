@@ -6,6 +6,9 @@
 parameters:
     mailer-dsn: '%env(MAILER_DSN)%'
     contact-email: 'andrik_33@mail.ru'
+    moex:
+        file-directory: '%kernel.project_dir%/upload'
+        limit-in-page: 50
 
 services:
     # default configuration for services in *this* file
