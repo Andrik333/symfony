@@ -1,0 +1,78 @@
+body
+    min-height: 100vh
+    margin: 0
+    padding: 20px
+    box-sizing: border-box
+
+    #wrapper, .main-col
+        >
+            *
+                margin-bottom: 20px
+
+                &:last-child
+                    margin-bottom: 0
+
+    #file_form, .wrapper-table, .notice, .pagination
+        display: flex
+        justify-content: center
+
+    .top
+        display: flex
+        justify-content: space-around
+
+    table
+        border-collapse: collapse
+
+    th, td
+        border: 2px solid #cdcccc
+        padding: 5px 3px
+
+    th
+        border-top: none
+
+    th, td
+        &:first-child
+            border-left: none
+        
+        &:last-child
+            border-right: none
+
+    tbody
+        tr
+            &:last-child
+                td
+                    border-bottom: none
+
+    .notice
+        span
+            color: white
+            padding: 10px
+
+    .notice.complite
+        span
+            background-color: #00a65a
+
+    .notice.error
+        span
+            background-color: #f55
+
+    .pagination
+        padding: 10px
+
+        > *
+            margin: 0 5px
+            padding: 10px
+            border-radius: 7px
+
+        > *:not(.current)
+            background: #efefef
+            border: 1px solid #cfcfcf
+
+        .current
+            background: #e8e8e8
+            box-shadow: 0px 0px 6px 2px #999999
+            cursor: no-drop
+
+        a
+            text-decoration: none
+            color: #3933ff

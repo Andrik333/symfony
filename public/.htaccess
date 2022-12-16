@@ -3,4 +3,5 @@ RewriteBase /
 
 RewriteCond %{REQUEST_URI} !^/assets/
 RewriteCond %{REQUEST_URI} !^/bundles/
+RewriteCond %{REQUEST_URI} !^/build/
 RewriteRule .+ index.php

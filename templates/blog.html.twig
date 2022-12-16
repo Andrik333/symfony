@@ -6,7 +6,7 @@
     {{ parent() }}
     <link href='http://fonts.googleapis.com/css?family=Irish+Grover' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=La+Belle+Aurore' rel='stylesheet' type='text/css'>
-    <link href="{{ asset('assets/blog/css/style.css') }}" type="text/css" rel="stylesheet" />
+    {{ encore_entry_link_tags('blog') }}
 {% endblock %}
 
 {% block body %}
